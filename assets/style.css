@@ -1,0 +1,151 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+
+:root {
+    --cor_clara: #098151;
+    --cor_escura: #044d30;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    background-image: url(img/background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    flex-direction: column;
+    font-size: 62.5%;
+}
+
+main {
+    width: 60%;
+    height: 80vh;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 3rem;
+    box-shadow: 2px 2px 15px #00000060;
+    overflow: hidden;
+}
+
+.sectionImage {
+    width: 40%;
+    height: 100%;
+    overflow: hidden;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    object-fit: cover;
+}
+
+.sectionForm {
+    width: 60%;
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sectionForm h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 3rem;
+    color: var(--cor_escura);
+}
+
+.sectionForm p {
+    color: #00000090;
+    font-size: 0.7rem;
+}
+
+.sectionForm ul {
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 1rem;
+    list-style: none;
+    margin-top: 1rem;
+}
+
+.sectionForm div {
+    margin-top: 0.5rem;
+}
+
+.buttonMenu {
+    background-color: var(--cor_escura);
+    color: #fff;
+    border: none;
+    border-radius: 0.6rem;
+    padding: 0.5rem 1.3rem;
+}
+
+.buttonMenu:hover {
+    background-color: var(--cor_clara);
+    box-shadow: 2px 2px 15px #044d3034;
+}
+
+a {
+    color: var(--cor_clara);
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    color: #fff;
+}
+
+
+
+/* ____________________________  JAVASCRIPT  ____________________________ */
+
+
+/* ____________________________  RESPONSIVO  ____________________________ */
+@media screen and (max-width: 1300px) {
+    main {
+        width: 80%;
+    }
+
+    .sectionForm {    
+        padding: 2rem;
+    }
+}
+
+@media screen and (max-width: 660px) {
+    main {
+        width: 90%;
+        height: 90vh;
+        flex-direction: column;
+    }
+
+    .sectionImage {
+        width: 100%;
+        height: 40%;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    .sectionForm {
+        width: 100%;
+        height: 60%;
+    }
+}
