@@ -1,3 +1,4 @@
+// Mensagem de inputs vazios ou camisa repetida
 function mensagemError(formInputs, msg){
     let mensagem = document.getElementById('errorDeDados')
 
@@ -19,10 +20,10 @@ function mensagemError(formInputs, msg){
     }
 }
 
-function validarDados(formInputs, numCamisa){
-    // validade inputs sem preencher no formulario e validade se já há joagador com a mesma camisa na lista
+// Verificar se há inputs sem preencher no formulario e/ou se há joagador com a mesma camisa na lista
+function validarDados(formInputs, camisa){
     const inputs = document.querySelectorAll('.input')
-    const verificaCamisaRepetida =  listaJogadores.some(e => numCamisa === e.numCamisa)
+    const verificaCamisaRepetida =  listaJogadores.some(e => camisa === e.camisa)
 
     let verificaInputvazio = true
     inputs.forEach((e)=>{
@@ -42,8 +43,13 @@ function validarDados(formInputs, numCamisa){
     return false
 }
 
-
+//Confirmar se o usuário quer mesmo adicionar ou excluir o jagador selecionado
 function mensagemDeConfirmacao (formInputs, msg){
+    const divConfirmacaoExistente = document.getElementById('divConfirmacao')
+    if (divConfirmacaoExistente) {
+        divConfirmacaoExistente.remove();
+    }
+
     const divConfirmacao = document.createElement('div')
     const pConfirmacao = document.createElement('p')
     const buttonConfirmacao = document.createElement('button')
@@ -65,6 +71,7 @@ function mensagemDeConfirmacao (formInputs, msg){
     return buttonConfirmacao
 }
 
+//Adicionar um jogador a lista de jogadores
 function inserirDadosJogador(listaJogadores, sectionForm, formInputs){
 
     const criarInput= (type, id, labelText ) =>{
@@ -98,16 +105,13 @@ function inserirDadosJogador(listaJogadores, sectionForm, formInputs){
         const listInputs = [inputNome.input.value, inputPosicao.input.value, inputNumeroCamisa.input.value]
         const verificacao = validarDados(formInputs, inputNumeroCamisa.input.value)
 
-        console.log(verificacao)
-
         if(verificacao){
             const buttonConfirmacao = mensagemDeConfirmacao(formInputs, 'adicionar')
             buttonConfirmacao.addEventListener('click', (event) =>{
-                // const divConfirmacao = getElementById('divConfirmacao')
                 event.preventDefault()
+                const divConfirmacao = document.getElementById('divConfirmacao')
+                divConfirmacao.remove()
                 listaJogadores.push({nome: listInputs[0], posicao: listInputs[1], camisa: listInputs[2]})
-                // divConfirmacao.innerHTML = ''
-                console.log('aqui')
             })
         }
     })
