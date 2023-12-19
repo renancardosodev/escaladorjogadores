@@ -1,3 +1,20 @@
+//excluir ao apertar algum botão as tags não necessárias no momento
+function excluirTagsExistentes (){
+    const divListGamersExistente = document.getElementById('listGamers')
+    if (divListGamersExistente) {
+        divListGamersExistente.remove();
+    }
+    const divConfirmacaoExistente = document.getElementById('divConfirmacao')
+    if (divConfirmacaoExistente) {
+        divConfirmacaoExistente.remove();
+    }
+    const pMensgamDeError = document.getElementById('errorDeDados')
+    if (pMensgamDeError) {
+        pMensgamDeError.remove();
+    }
+}
+
+// scrollar até o final da sectionForm
 function scrollando(sectionForm){
     sectionForm.scrollTo({
         top: sectionForm.scrollHeight,
@@ -5,12 +22,9 @@ function scrollando(sectionForm){
     })
 }
 
-
+// listar todos os jogadores já salvos
 function listarJogadores(sectionForm ,listJogadores){
-    const divListGamersExistente = document.getElementById('listGamers')
-    if (divListGamersExistente) {
-        divListGamersExistente.remove();
-    }
+    excluirTagsExistentes()
 
     const divListGamers = document.createElement('div')
     const h2ListGamers = document.createElement('h2')
@@ -22,34 +36,29 @@ function listarJogadores(sectionForm ,listJogadores){
     divListGamers.append(h2ListGamers,ulJogador)
     sectionForm.appendChild(divListGamers)
 
-    listJogadores.forEach(e=>{
-        const liJogador = document.createElement('li')
-        liJogador.innerText = `Nome: ${e.nome}\nPosição: ${e.posicao}\nCamisa: ${e.camisa}`
-        ulJogador.appendChild(liJogador)
-    })
-
-
+    if(listJogadores[0] == undefined){
+        divListGamers.innerText = 'Ainda não há jogadores! Aproveite para adicionar uma agora.'
+    }else{
+        listJogadores.forEach(e=>{
+            const liJogador = document.createElement('li')
+            liJogador.innerText = `Nome: ${e.nome}\nPosição: ${e.posicao}\nCamisa: ${e.camisa}`
+            ulJogador.appendChild(liJogador)
+        })
+    }
 }
 
 // Mensagem de inputs vazios ou camisa repetida
 function mensagemError(formInputs, msg){
-    let mensagem = document.getElementById('errorDeDados')
+    excluirTagsExistentes()
 
-    if(mensagem){
-        mensagem.innerHTML = '';
-    }else{
-        const p_error = document.createElement('p')
-        p_error.id = 'errorDeDados'
-        formInputs.appendChild(p_error)
-        mensagem = p_error
-    }
+    const p_error = document.createElement('p')
+    p_error.id = 'errorDeDados'
+    formInputs.appendChild(p_error)
 
     if(msg == 'repetido'){
-        mensagem.innerText = 'Já há um jogador com esse número de camisa. Remova-o antes de adicionar um novo.'
+        p_error.innerText = 'Já há um jogador com esse número de camisa. Remova-o antes de adicionar um novo.'
     }else if (msg == 'inputVazio') {
-        mensagem.innerText = 'Verifique se todos os campos estão preenchidos'
-    }else {
-        mensagem.innerHTML = '';
+        p_error.innerText = 'Verifique se todos os campos estão preenchidos'
     }
 }
 
@@ -70,7 +79,6 @@ function validarDados(formInputs, camisa){
     }else if (verificaCamisaRepetida){
         mensagemError(formInputs, 'repetido')
     } else { 
-        mensagemError(formInputs, 'limpar')
         return true
     }
     return false
@@ -78,10 +86,7 @@ function validarDados(formInputs, camisa){
 
 //Confirmar se o usuário quer mesmo adicionar ou excluir o jagador selecionado
 function mensagemDeConfirmacao (formInputs, msg){
-    const divConfirmacaoExistente = document.getElementById('divConfirmacao')
-    if (divConfirmacaoExistente) {
-        divConfirmacaoExistente.remove();
-    }
+    excluirTagsExistentes()
 
     const divConfirmacao = document.createElement('div')
     const pConfirmacao = document.createElement('p')
@@ -144,11 +149,9 @@ function inserirDadosJogador(listJogadores, sectionForm, formInputs){
             buttonConfirmacao.addEventListener('click', (event) =>{
                 event.preventDefault()
                 formInputs.reset()
-                const divConfirmacao = document.getElementById('divConfirmacao')
-                divConfirmacao.remove()
+                excluirTagsExistentes()
                 listJogadores.push({nome: listInputs[0], posicao: listInputs[1], camisa: listInputs[2]})
                 listarJogadores(sectionForm, listJogadores)
-
                 scrollando(sectionForm)
             })
         }
@@ -165,11 +168,13 @@ const listJogadores = []
 formInputs.id = 'formInputs'
 
 buttonAdd.addEventListener('click', () =>{
+    excluirTagsExistentes()
     inserirDadosJogador(listJogadores, sectionForm, formInputs)
     scrollando(sectionForm)
 })
 
 aListGamers.addEventListener('click', () => {
+    excluirTagsExistentes()
     listarJogadores(sectionForm, listJogadores)
     scrollando(sectionForm)
 })
