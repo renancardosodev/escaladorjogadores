@@ -1,3 +1,36 @@
+function scrollando(sectionForm){
+    sectionForm.scrollTo({
+        top: sectionForm.scrollHeight,
+        behavior: 'smooth'
+    })
+}
+
+
+function listarJogadores(sectionForm ,listJogadores){
+    const divListGamersExistente = document.getElementById('listGamers')
+    if (divListGamersExistente) {
+        divListGamersExistente.remove();
+    }
+
+    const divListGamers = document.createElement('div')
+    const h2ListGamers = document.createElement('h2')
+    const ulJogador = document.createElement('ul') 
+
+    divListGamers.id = 'listGamers'
+    h2ListGamers.innerText = 'Lista de Jogadores'
+    ulJogador.classList.add('jogador')
+    divListGamers.append(h2ListGamers,ulJogador)
+    sectionForm.appendChild(divListGamers)
+
+    listJogadores.forEach(e=>{
+        const liJogador = document.createElement('li')
+        liJogador.innerText = `Nome: ${e.nome}\nPosição: ${e.posicao}\nCamisa: ${e.camisa}`
+        ulJogador.appendChild(liJogador)
+    })
+
+
+}
+
 // Mensagem de inputs vazios ou camisa repetida
 function mensagemError(formInputs, msg){
     let mensagem = document.getElementById('errorDeDados')
@@ -23,7 +56,7 @@ function mensagemError(formInputs, msg){
 // Verificar se há inputs sem preencher no formulario e/ou se há joagador com a mesma camisa na lista
 function validarDados(formInputs, camisa){
     const inputs = document.querySelectorAll('.input')
-    const verificaCamisaRepetida =  listaJogadores.some(e => camisa === e.camisa)
+    const verificaCamisaRepetida =  listJogadores.some(e => camisa === e.camisa)
 
     let verificaInputvazio = true
     inputs.forEach((e)=>{
@@ -72,7 +105,7 @@ function mensagemDeConfirmacao (formInputs, msg){
 }
 
 //Adicionar um jogador a lista de jogadores
-function inserirDadosJogador(listaJogadores, sectionForm, formInputs){
+function inserirDadosJogador(listJogadores, sectionForm, formInputs){
 
     const criarInput= (type, id, labelText ) =>{
         const input = document.createElement('input')
@@ -104,14 +137,19 @@ function inserirDadosJogador(listaJogadores, sectionForm, formInputs){
         event.preventDefault()
         const listInputs = [inputNome.input.value, inputPosicao.input.value, inputNumeroCamisa.input.value]
         const verificacao = validarDados(formInputs, inputNumeroCamisa.input.value)
+        scrollando(sectionForm)
 
         if(verificacao){
             const buttonConfirmacao = mensagemDeConfirmacao(formInputs, 'adicionar')
             buttonConfirmacao.addEventListener('click', (event) =>{
                 event.preventDefault()
+                formInputs.reset()
                 const divConfirmacao = document.getElementById('divConfirmacao')
                 divConfirmacao.remove()
-                listaJogadores.push({nome: listInputs[0], posicao: listInputs[1], camisa: listInputs[2]})
+                listJogadores.push({nome: listInputs[0], posicao: listInputs[1], camisa: listInputs[2]})
+                listarJogadores(sectionForm, listJogadores)
+
+                scrollando(sectionForm)
             })
         }
     })
@@ -120,16 +158,21 @@ function inserirDadosJogador(listaJogadores, sectionForm, formInputs){
 const sectionForm = document.getElementsByClassName('sectionForm')[0]
 const buttonAdd = document.querySelector('#buttonAdd')
 const buttonDelete = document.querySelector('#buttonDelete')
+const aListGamers = document.querySelector('#aListGamers')
 const formInputs = document.createElement('form')
-let listaJogadores = []
+const listJogadores = []
 
 formInputs.id = 'formInputs'
 
 buttonAdd.addEventListener('click', () =>{
-    inserirDadosJogador(listaJogadores, sectionForm, formInputs)
+    inserirDadosJogador(listJogadores, sectionForm, formInputs)
+    scrollando(sectionForm)
 })
 
-
+aListGamers.addEventListener('click', () => {
+    listarJogadores(sectionForm, listJogadores)
+    scrollando(sectionForm)
+})
 
 
 // const divListGamers = document.createElement('div')
