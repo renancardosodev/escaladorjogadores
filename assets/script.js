@@ -1,50 +1,58 @@
-function mensagemError(v, formInputs, msg){
-    const mensagem = document.getElementById('errorDeDados')
+function mensagemError(formInputs, msg){
+    let mensagem = document.getElementById('errorDeDados')
 
-    if(v){
-        mensagem.innerHTML = ''
-        return true
-
-    }else if ((!mensagem)) {
+    if(mensagem){
+        mensagem.innerHTML = '';
+    }else{
         const p_error = document.createElement('p')
         p_error.id = 'errorDeDados'
-        p_error.innerText = msg === 'repetido'?
-        'Já há um jogador com esse número de camisa. Remova-o antes de adicionar um novo.'
-        :'Verifique se todos os campos estão preenchidos'
+        formInputs.appendChild(p_error)
+        mensagem = p_error
+    }
 
-        formInputs.append(p_error)
-        return false
+    if(msg == 'repetido'){
+        mensagem.innerText = 'Já há um jogador com esse número de camisa. Remova-o antes de adicionar um novo.'
+    }else if (msg == 'inputVazio') {
+        mensagem.innerText = 'Verifique se todos os campos estão preenchidos'
+    }else {
+        mensagem.innerHTML = '';
     }
 }
 
-function validarDados(formInputs){
-// validade inputs sem preencher no formulario
+function validarDados(formInputs, numCamisa){
+    // validade inputs sem preencher no formulario e validade se já há joagador com a mesma camisa na lista
     const inputs = document.querySelectorAll('.input')
+    const verificaCamisaRepetida =  listaJogadores.some(e => numCamisa === e.numCamisa)
+
     let verificaInputvazio = true
     inputs.forEach((e)=>{
         if(e.value.trim() === ''){
             verificaInputvazio = false
         }
     })
-    if (mensagemError(verificaInputvazio, formInputs, 'inputVazio')){
-        // validade se já há joagador com a mesma camisa na lista
-        const verificaCamisaRepetida =  listaJogadores.some(e => numCamisa == e.numCamisa?false:true)
-        if(mensagemError(verificaCamisaRepetida, formInputs, 'repetido')){
-            return false
-        }else {
-            return true
-        }
+
+    if(verificaInputvazio == false){ 
+        mensagemError(formInputs, 'inputVazio')
+    }else if (verificaCamisaRepetida){
+        mensagemError(formInputs, 'repetido')
+    } else { 
+        mensagemError(formInputs, 'limpar')
+        return true
     }
+    return false
 }
 
 
 function mensagemDeConfirmacao (formInputs, msg){
-    const divConfimacao = document.createElement('div')
+    const divConfirmacao = document.createElement('div')
     const pConfirmacao = document.createElement('p')
     const buttonConfirmacao = document.createElement('button')
 
-    divConfimacao.id = 'divConfirmacao'
-    buttonConfirmacao.classList.add('.buttonAddRemove')
+    divConfirmacao.id = 'divConfirmacao'
+    buttonConfirmacao.classList.add('buttonAddRemove')
+
+    divConfirmacao.append(pConfirmacao, buttonConfirmacao)
+    formInputs.appendChild(divConfirmacao)
 
     if(msg === 'adicionar'){
         pConfirmacao.innerText = 'Tem certeza que quer adicionar esse jogador ao time?'
@@ -53,9 +61,7 @@ function mensagemDeConfirmacao (formInputs, msg){
         pConfirmacao.innerText = 'Tem certeza que deseja excluir esse jogador?'
         buttonConfirmacao.innerText = 'Excluir'
     }
-    divConfimacao.append(pConfirmacao, buttonConfirmacao)
-    formInputs.appendChild(divConfimacao)
-
+  
     return buttonConfirmacao
 }
 
@@ -87,14 +93,21 @@ function inserirDadosJogador(listaJogadores, sectionForm, formInputs){
     formInputs.append(inputNome.label, inputNome.input, inputPosicao.label, inputPosicao.input, inputNumeroCamisa.label, inputNumeroCamisa.input, buttonAdd)
     sectionForm.appendChild(formInputs)
 
-    buttonAdd.addEventListener('click', ()=>{
+    buttonAdd.addEventListener('click', (event)=>{
+        event.preventDefault()
         const listInputs = [inputNome.input.value, inputPosicao.input.value, inputNumeroCamisa.input.value]
-        const verificacao = validarDados(formInputs)
+        const verificacao = validarDados(formInputs, inputNumeroCamisa.input.value)
+
+        console.log(verificacao)
 
         if(verificacao){
             const buttonConfirmacao = mensagemDeConfirmacao(formInputs, 'adicionar')
-            buttonConfirmacao.addEventListener('click', () =>{
+            buttonConfirmacao.addEventListener('click', (event) =>{
+                // const divConfirmacao = getElementById('divConfirmacao')
+                event.preventDefault()
                 listaJogadores.push({nome: listInputs[0], posicao: listInputs[1], camisa: listInputs[2]})
+                // divConfirmacao.innerHTML = ''
+                console.log('aqui')
             })
         }
     })
