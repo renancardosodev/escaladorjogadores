@@ -7,6 +7,16 @@
     --cor_escura: #044d30;
 }
 
+::-webkit-scrollbar{
+    width: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb{
+    width: 1rem;
+    background-color: #098151;
+    border-radius: 5rem;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -109,6 +119,16 @@ a {
     color: var(--cor_clara);
 }
 
+input {
+    border-radius: 0.4rem;
+    border-color: #0000001a;
+}
+
+input:focus {
+    outline: none;
+    border:2px solid var(--cor_clara);
+}
+
 footer {
     position: fixed;
     bottom: 0;
@@ -137,10 +157,23 @@ form label {
     margin-top: 1rem;
 }
 
-.buttonAddRemove:hover{
+.buttonAddRemove:hover {
     background-color: var(--cor_escura);
     box-shadow: 2px 2px 15px #044d3034;
     cursor: pointer;
+}
+
+#listGamers h2 {
+    color: var(--cor_escura);
+}
+
+.jogador {
+    display: flex; 
+    flex-direction: column;
+}
+
+.jogador li {
+    align-self: flex-start;
 }
 
 /* ____________________________  RESPONSIVO  ____________________________ */
