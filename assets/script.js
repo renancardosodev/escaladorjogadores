@@ -22,7 +22,6 @@ function excluirTagsExistentes (opcao){
             formInputs.remove();
         }
     }
-
 }
 
 // scrollar até o final da sectionForm
@@ -48,7 +47,7 @@ function listarJogadores(sectionForm ,listJogadores){
     sectionForm.appendChild(divListGamers)
 
     if(listJogadores[0] == undefined){
-        divListGamers.innerText = 'Ainda não há jogadores! Aproveite para adicionar uma agora.'
+        divListGamers.innerText = 'Não há jogadores! Aproveite para adicionar um agora.'
     }else{
         listJogadores.forEach(e=>{
             const liJogador = document.createElement('li')
@@ -59,24 +58,29 @@ function listarJogadores(sectionForm ,listJogadores){
 }
 
 // Mensagem de inputs vazios ou camisa repetida
-function mensagemError(sectionForm, msg){
-    excluirTagsExistentes()
+function mensagemError(sectionForm, msg) {
+    excluirTagsExistentes();
 
-    const p_error = document.createElement('p')
-    p_error.id = 'errorDeDados'
-    sectionForm.appendChild(p_error)
+    const p_error = document.createElement('p');
+    p_error.id = 'errorDeDados';
+    sectionForm.appendChild(p_error);
 
-    if(msg == 'repetido'){
-        p_error.innerText = 'Já há um jogador com esse número de camisa. Remova-o antes de adicionar um novo.'
-    }else if (msg == 'inputVazio') {
-        p_error.innerText = 'Verifique se todos os campos estão preenchidos'
-    }
+    const mensagens = {
+        'repetido': 'Já há um jogador com esse número de camisa. Remova-o antes de adicionar um novo.',
+        'inputVazio': 'Verifique se todos os campos estão preenchidos.',
+        'deletar': 'Não existe jogador com esse número de camisa.'
+    };
+
+    p_error.innerText = mensagens[msg] || 'Erro desconhecido.';
 }
 
+
 // Verificar se há inputs sem preencher no formulario e/ou se há joagador com a mesma camisa na lista
-function validarDados(sectionForm, camisa){
-    const inputs = document.querySelectorAll('.input')
+function validarDados(sectionForm, camisa, opcao){
+    const inputs =[...document.querySelectorAll('.input')]
     const verificaCamisaRepetida =  listJogadores.some(e => camisa === e.camisa)
+    console.log(inputs)
+    console.log(verificaCamisaRepetida)
 
     let verificaInputvazio = true
     inputs.forEach((e)=>{
@@ -88,8 +92,15 @@ function validarDados(sectionForm, camisa){
     if(verificaInputvazio == false){ 
         mensagemError(sectionForm, 'inputVazio')
     }else if (verificaCamisaRepetida){
-        mensagemError(sectionForm, 'repetido')
-    } else { 
+        if(opcao === 'del'){
+            return true
+        }else {
+            mensagemError(sectionForm, 'repetido')
+        }
+    }else if (opcao === 'del'){
+        console.log('deletar')
+        mensagemError(sectionForm, 'deletar')
+    }else{
         return true
     }
     return false
@@ -120,6 +131,7 @@ function mensagemDeConfirmacao (sectionForm, msg){
     return buttonConfirmacao
 }
 
+//Gerador de inputs tranformando eles em objetos
 const criarInput = (type, id, labelText ) =>{
     const input = document.createElement('input')
     input.type = type
@@ -133,6 +145,7 @@ const criarInput = (type, id, labelText ) =>{
     return {label, input}
 }
 
+// ____________________________________ADICIONAR _______________________________________________
 //Adicionar um jogador a lista de jogadores
 function addJogador(listJogadores, sectionForm){
     const formInputs = document.createElement('form')
@@ -170,6 +183,7 @@ function addJogador(listJogadores, sectionForm){
     })
 }
 
+// ____________________________________REMOVER _______________________________________________
 //remover um jogador da lista por meio do número da camisa
 function deleteJogador(listJogadores, sectionForm){
     const formDelete = document.createElement('form')
@@ -185,17 +199,14 @@ function deleteJogador(listJogadores, sectionForm){
 
     buttonDelete.addEventListener('click', (event)=>{
         event.preventDefault()
-        // const listInputs = [inputNome.input.value, inputPosicao.input.value, inputNumeroCamisa.input.value]
-        const verificacao = validarDados(sectionForm, inputCamisa.input.value)
+        const verificacao = validarDados(sectionForm, inputCamisa.input.value, 'del')
         
-
         if(verificacao){
             const indexJogadorEscolhido = listJogadores.findIndex(e=>e.camisa === inputCamisa.input.value)
             const pJogadorEscolhido = document.createElement('p')
-            const jogador = listJogadores[indexJogadorEscolhido]
+            const jogador = listJogadores[indexJogadorEscolhido]   
 
-            console.log(jogador)
-
+            pJogadorEscolhido.id = 'jogadorEscolhido'
             pJogadorEscolhido.innerText = `Nome: ${jogador.nome}\nPosicao: ${jogador.posicao}\nCamisa: ${jogador.camisa}`
             sectionForm.appendChild(pJogadorEscolhido)
             
@@ -205,6 +216,9 @@ function deleteJogador(listJogadores, sectionForm){
                 event.preventDefault()
                 formDelete.reset()
                 excluirTagsExistentes()
+                if (pJogadorEscolhido) {
+                    pJogadorEscolhido.remove();
+                }
                 listJogadores.splice(indexJogadorEscolhido,1)
                 listarJogadores(sectionForm, listJogadores)
                 scrollando(sectionForm)
@@ -214,7 +228,7 @@ function deleteJogador(listJogadores, sectionForm){
     })
 }
 
-
+// ____________________________________PRINCIPAL _______________________________________________
 const sectionForm = document.getElementsByClassName('sectionForm')[0]
 const buttonAdd = document.querySelector('#buttonAdd')
 const buttonDelete = document.querySelector('#buttonDelete')
