@@ -99,6 +99,7 @@ img {
 .buttonMenu:hover {
     background-color: var(--cor_clara);
     box-shadow: 2px 2px 15px #044d3034;
+    cursor: pointer;
 }
 
 a {
@@ -114,7 +115,30 @@ footer {
 
 
 /* ____________________________  JAVASCRIPT  ____________________________ */
+form {
+    display: flex;
+    flex-direction: column;
+}
 
+form label {
+    margin-top: 0.8rem;
+}
+
+.buttonAddRemove {
+    width: 7rem;
+    background-color: var(--cor_clara);
+    color: #fff;
+    border: none;
+    border-radius: 0.4rem;
+    padding: 0.3rem 0.8rem;
+    margin-top: 1rem;
+}
+
+.buttonAddRemove:hover{
+    background-color: var(--cor_escura);
+    box-shadow: 2px 2px 15px #044d3034;
+    cursor: pointer;
+}
 
 /* ____________________________  RESPONSIVO  ____________________________ */
 @media screen and (max-width: 1300px) {
