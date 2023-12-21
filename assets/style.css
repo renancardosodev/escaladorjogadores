@@ -107,6 +107,7 @@ img {
     border: none;
     border-radius: 0.6rem;
     padding: 0.5rem 1.3rem;
+    transition: 0.5s;
 }
 
 .buttonMenu:hover {
@@ -155,6 +156,7 @@ form label {
     border-radius: 0.4rem;
     padding: 0.3rem 0.8rem;
     margin-top: 1rem;
+    transition: 0.5s;
 }
 
 .buttonAddRemove:hover {
