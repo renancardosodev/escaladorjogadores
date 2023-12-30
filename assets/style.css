@@ -123,6 +123,7 @@ a {
 input {
     border-radius: 0.4rem;
     border-color: #0000001a;
+    padding: 0 0.5rem;
 }
 
 input:focus {
